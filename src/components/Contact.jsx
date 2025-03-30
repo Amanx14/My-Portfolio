@@ -11,7 +11,7 @@ import { form } from "framer-motion/client";
 
 const Contact = () => {
   const formRef = useRef();
-  const [first, setForm] = useState({
+  const [form, setForm] = useState({
     name: '',
     email: '',
     message: ''
@@ -20,10 +20,10 @@ const Contact = () => {
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
 
     setForm({
-      ...form, [name] : value
+      ...form, [name]: value
     })
   }
 
@@ -31,7 +31,29 @@ const Contact = () => {
     e.preventDefault();
     setLoading(true);
 
-    emailjs.send()
+    emailjs.send("service_qb1cxcx", "template_rffwh9q",
+      {
+        from_name: form.name,
+        to_name: 'Aman',
+        from_email: form.email,
+        to_email: 'amannkumar14@gmail.com',
+        message: form.message
+      },
+      "vAawsaYWnK6QTBnlE"
+    ).then(()=> {
+      setLoading(false);
+      alert("Thank you, I'll get back to you as soon as possible!");
+
+      setForm({
+        name: '',
+        email: '',
+        message: ''
+      })
+    }), (error ) => {
+      setLoading(false)
+      console.log("Error", error);
+      alert('Something went wrong.');
+    }
   }
 
   return (
@@ -86,7 +108,7 @@ const Contact = () => {
 
           <button
             type='submit'
-            className='bg-tertiary py-3 px-8 rounded-xl outline-none w-fit text-white font-bold shadow-md shadow-primary'
+            className='bg-tertiary cursor-pointer py-3 px-8 rounded-xl outline-none w-fit text-white font-bold shadow-md shadow-primary'
           >
             {loading ? "Sending..." : "Send"}
           </button>
