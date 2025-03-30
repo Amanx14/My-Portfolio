@@ -22,17 +22,17 @@ const Computers = ({ isMobile }) => {
       <pointLight intensity={1} />
       <primitive
         object={computer.scene}
-        scale={isMobile ? 0.6 : 0.75}
-        position={isMobile ? [0, -3, -2.2] : [0, -3.25, -1.8]}
+        scale={0.75}
+        position={[0, -3.25, -1.8]}
         rotation={[-0.01, -0.2, -0.1]}
       />
       <primitive
         object={computer2.scene}
-        scale={isMobile ? 0.9 : 1}
-        position={isMobile ? [0, -3, 2.76] : [0, -3.23, 3.45]}
+        scale={1}
+        position={[0, -3.23, 3.45]}
         rotation={[-0.00, -1.5, -0]}
       />
-      
+
     </mesh>
   );
 };
@@ -62,24 +62,26 @@ const ComputersCanvas = () => {
   }, []);
 
   return (
-    <Canvas
-      frameloop='demand'
-      shadows
-      dpr={[1, 2]}
-      camera={{ position: [20, 3, 5], fov: 25 }}
-      gl={{ preserveDrawingBuffer: true }}
-    >
-      <Suspense fallback={<CanvasLoader />}>
-        <OrbitControls
-          enableZoom={false}
-          maxPolarAngle={Math.PI / 2}
-          minPolarAngle={Math.PI / 2}
-        />
-        <Computers isMobile={isMobile} />
-      </Suspense>
+    <>
+      {!isMobile && <Canvas
+        frameloop='demand'
+        shadows
+        dpr={[1, 2]}
+        camera={{ position: [20, 3, 5], fov: 25 }}
+        gl={{ preserveDrawingBuffer: true }}
+      >
+        <Suspense fallback={<CanvasLoader />}>
+          <OrbitControls
+            enableZoom={false}
+            maxPolarAngle={Math.PI / 2}
+            minPolarAngle={Math.PI / 2}
+          />
+          <Computers isMobile={isMobile} />
+        </Suspense>
 
-      <Preload all />
-    </Canvas>
+        <Preload all />
+      </Canvas>}
+    </>
   );
 };
 
