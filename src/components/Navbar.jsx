@@ -1,35 +1,32 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
-import  styles  from "../styles";
-import { navLinks } from "../constants"
-import { logo, menu, close } from "../assets"
-
+import styles from "../styles";
+import { navLinks } from "../constants";
+import { logo, menu, close } from "../assets";
 
 const Navbar = () => {
-
-  const [active, setActive] = useState('');
+  const [active, setActive] = useState("");
   const [toggle, setToggle] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  useEffect(()=> {
+  useEffect(() => {
     const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      if (scrollTop > 100) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(window.scrollY > 100);
     };
-  
+
     window.addEventListener("scroll", handleScroll);
-  
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <nav className={`fixed ${styles.paddingX} w-full flex items-center top-0 z-20 py-5 bg-primary`}>
+    <nav
+      className={`fixed ${styles.paddingX} w-full flex items-center top-0 z-20 py-5 transition-all duration-300 ${
+        scrolled ? "bg-primary shadow-lg" : "bg-transparent"
+      }`}
+    >
       <div className="w-full flex items-center justify-between max-w-7xl mx-auto">
-        <Link to="/"
+        <Link
+          to="/"
           className="flex items-center gap-2"
           onClick={() => {
             setActive("");
@@ -40,43 +37,51 @@ const Navbar = () => {
           <p className="text-white text-[18px] font-bold cursor-pointer">Aman Kumar</p>
         </Link>
         <ul className="list-none hidden sm:flex flex-row gap-10">
-          {
-            navLinks.map((link) => (
-              <li key={link.id} className={`${active === link.title ? "text-white" : "text-secondary"} hover:text-white text-[18px]
-              font-medium cursor-pointer`} onClick={() => setActive(link.title)}>
-                <a href={`#${link.id}`}>{link.title}</a>
-              </li>
-            ))
-          }
+          {navLinks.map((link) => (
+            <li
+              key={link.id}
+              className={`${
+                active === link.title ? "text-white" : "text-secondary"
+              } hover:text-white text-[18px] font-medium cursor-pointer`}
+              onClick={() => setActive(link.title)}
+            >
+              <a href={`#${link.id}`}>{link.title}</a>
+            </li>
+          ))}
         </ul>
 
         <div className="sm:hidden flex">
-          <img src={toggle ? close : menu} alt="menu" className="w-[28px] h-[28px] object-contain cursor-pointer"
+          <img
+            src={toggle ? close : menu}
+            alt="menu"
+            className="w-[28px] h-[28px] object-contain cursor-pointer"
             onClick={() => setToggle(!toggle)}
           />
 
-          <div className={`${!toggle ? 'hidden' : 'flex'} p-6 black-gradient absolute top-20 right-0 mx-4 my-2  min-w-[140px] z-10 rounded-xl`}>
+          <div
+            className={`${
+              !toggle ? "hidden" : "flex"
+            } p-6 bg-black absolute top-20 right-0 mx-4 my-2 min-w-[140px] z-10 rounded-xl`}
+          >
             <ul className="list-none flex justify-end items-start flex-col gap-4">
-              {
-                navLinks.map((link) => (
-                  <li key={link.id} className={`${active === link.title ? "text-white" : "text-secondary"} text-[16px]
-              font-medium cursor-pointer`} onClick={() => {
-                      setToggle(!toggle);
-                      setActive(link.title)
-                    }}>
-                    <a href={`#${link.id}`}>{link.title}</a>
-                  </li>
-                ))
-              }
+              {navLinks.map((link) => (
+                <li
+                  key={link.id}
+                  className={`${
+                    active === link.title ? "text-white" : "text-secondary"
+                  } text-[16px] font-medium cursor-pointer`}
+                  onClick={() => {
+                    setToggle(!toggle);
+                    setActive(link.title);
+                  }}
+                >
+                  <a href={`#${link.id}`}>{link.title}</a>
+                </li>
+              ))}
             </ul>
           </div>
-
         </div>
-
-
-
       </div>
-
     </nav>
   );
 };
