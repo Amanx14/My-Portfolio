@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import  styles  from "../styles";
 import { navLinks } from "../constants"
 import { logo, menu, close } from "../assets"
@@ -10,6 +10,21 @@ const Navbar = () => {
 
   const [active, setActive] = useState('');
   const [toggle, setToggle] = useState(false);
+
+  useEffect(()=> {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      if (scrollTop > 100) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+  
+    window.addEventListener("scroll", handleScroll);
+  
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <nav className={`fixed ${styles.paddingX} w-full flex items-center top-0 z-20 py-5 bg-primary`}>
